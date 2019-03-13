@@ -1,0 +1,27 @@
+ *{
+     margin: 0;
+     padding: 0;
+ }
+ #my2048 {
+     margin: 20px auto;
+     position: relative;
+    background: #bbada0;
+ }
+ #my2048 div {
+     position: absolute;
+     border: none;
+     display: inline;
+ }
+ .button{
+     margin: 10px auto;
+     display: block;
+     width: 200px;
+     height: 40px;
+     font-size: 25px; 
+     text-align: center;
+     outline: none;
+     cursor: pointer;
+     border-radius: 12px;
+     color: darkcyan;
+     background-image: radial-gradient(circle at center center, rgba(244, 23, 234, 0.2), rgba(0, 0, 0, 0.5));  background-image: linear-gradient(left,skyblue,pink,red)
+ }
