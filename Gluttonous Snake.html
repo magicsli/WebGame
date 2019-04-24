@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .map {
+            margin: 50px auto;
+            width: 600px;
+            height: 600px;
+            position: relative;
+            background-color: #ccc;
+        }
+        
+        .map div {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #a3a3a3;
+        }
+        
+        div.head {
+            background-color: #a33333;
+        }
+        
+        div.foot {
+            background-color: rgb(98, 13, 255);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="map"></div>
+
+    <script>
+        var map = document.getElementsByClassName('map')[0];
+        var snake = [];
+        var keyid = null,
+            foot = null;
+
+        for (var i = 0; i < 3; i++) {
+            var o = document.createElement('div');
+            map.appendChild(o);
+            o.style.top = '20px';
+            o.style.left = (i + 1) * 20 + 'px';
+            if (i == 2) o.className = 'head';
+            snake.push(o);
+        }
+
+        function getRandom(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+        console.log(snake);
+        var game = {
+            into: function() {
+                this.snakemove();
+                this.addfoot();
+            },
+            snakemove: function() {
+                document.body.onkeydown = function(e) {
+                    switch (e.which) {
+                        case 38:
+                            if (keyid) {
+                                clearInterval(keyid);
+                                keyid = null;
+                            }
+                            keyid = setInterval(function() {
+                                game.move(0, -20);
+                                game.eatfoot(0, 20);
+                                game.lose();
+                            }, 100)
+                            break;
+                        case 40:
+                            if (keyid) {
+                                clearInterval(keyid);
+                                keyid = null;
+                            }
+                            keyid = setInterval(
+                                function() {
+                                    game.move(0, 20);
+                                    game.eatfoot(0, -20);
+                                    game.lose();
+                                }, 100)
+                            break;
+                        case 37:
+                            if (keyid) {
+                                clearInterval(keyid);
+                                keyid = null;
+                            }
+                            keyid = setInterval(function() {
+                                game.move(-20, 0);
+                                game.eatfoot(20, 0);
+                                game.lose();
+                            }, 100)
+                            break;
+                        case 39:
+                            if (keyid) {
+                                clearInterval(keyid);
+                                keyid = null;
+                            }
+                            keyid = setInterval(function() {
+                                game.move(20, 0);
+                                game.eatfoot(-20, 0);
+                                game.lose();
+                            }, 100)
+                            break;
+                    }
+                }
+            },
+            move: function(addx, addy) {
+                for (var i = 0; i < snake.length; i++) {
+                    if (i == snake.length - 1) {
+                        snake[i].style.left = snake[i].offsetLeft + addx + 'px';
+                        snake[i].style.top = snake[i].offsetTop + addy + 'px';
+                        break;
+                    }
+                    snake[i].style.left = snake[i + 1].offsetLeft + 'px';
+                    snake[i].style.top = snake[i + 1].offsetTop + 'px';
+                }
+            },
+            addfoot: function() {
+                var x = getRandom(0, 29) * 20;
+                var y = getRandom(0, 29) * 20;
+                // console.log(x,y);
+                for (var i = 0; i < snake.length; i++) {
+                    if (x == snake[i].offsetLeft && y == snake[i].offsetTop) {
+                        game.addfoot();
+                        return;
+                    }
+                }
+                foot = document.createElement('div');
+                // foot.style.backgroundColor = 'blue';
+                foot.className = 'foot';
+                foot.style.top = y + 'px';
+                foot.style.left = x + 'px';
+                map.appendChild(foot);
+                // addfoot.foot = foot;
+            },
+            eatfoot: function(addx, addy) {
+                //  console.log(foot);
+                if (snake[snake.length - 1].offsetLeft == foot.offsetLeft && snake[snake.length - 1].offsetTop == foot.offsetTop) {
+                    // console.log(1);
+                    map.removeChild(foot);
+                    foot = null;
+                    game.addfoot();
+                    var newNode = snake[0].cloneNode(false);
+                    newNode.style.left = snake[0].offsetLeft + addx + 'px';
+                    newNode.style.top = snake[0].offsetTop + addy + 'px';
+                    snake.unshift(newNode);
+                    map.appendChild(snake[0]);
+                    console.log(snake.length);
+                }
+            },
+            lose: function() {
+                if (snake[snake.length - 1].offsetLeft > map.offsetWidth - snake[0].offsetWidth ||
+                    snake[snake.length - 1].offsetTop > map.offsetHeight - snake[0].offsetHeight ||
+                    snake[snake.length - 1].offsetTop < 0 || snake[snake.length - 1].offsetLeft < 0) {
+                    game.into = null;
+                    alert('游戏结束，你输了！！！');
+                    location.reload(true);
+                }
+            }
+        }
+        game.into();
+    </script>
+</body>
+
+</html>
