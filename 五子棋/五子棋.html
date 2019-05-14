@@ -17,16 +17,13 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            /* -webkit-top-light */
         }
         
         .checkerboard {
             display: flex;
-            /* overflow: hidden; */
             margin: 50px auto;
-            /* position: relative; */
-            width: 450px;
-            height: 450px;
+            width: 90%;
+            max-width: 450px;
             background-size: 100%;
             background-color: #ccc;
             flex-wrap: wrap;
@@ -35,31 +32,21 @@
         }
         
         .checkerboard>div {
-            /* width: 20px; */
             display: flex;
-            /* opacity: .6; */
             justify-content: center;
             align-items: center;
-            /* position: absolute; */
-            /* height: 20px; */
             box-sizing: border-box;
             flex: 6.66%;
-            /* background: url(./images/奇点.png); */
-            /* background-size: 100%; */
             cursor: pointer;
-            /* border: 1px solid rgba(46, 34, 34,.6); */
         }
         
         .checkerboard .chess {
             width: 80%;
-            /* background-color: rgb(255, 255, 255); */
             height: 80%;
             opacity: 1;
             border-radius: 50%;
             transition: all .2s;
             box-shadow: 3px 3px 5px rgba(44, 38, 5, 0.6)
-            /* cursor: no-drop; */
-            /* opacity: 1; */
         }
         
         .hint {
@@ -85,12 +72,9 @@
             display: flex;
             justify-content: space-between;
             margin: 10px auto;
-        
-            /* background-image: -webkit-radial-gradient(circle at center center,#E6E6E6,#7E7D81); */
         }
         
         .btn input {
-            /* width: 40%; */
             flex: 1;
             outline: none;
             border: none;
@@ -99,13 +83,7 @@
             margin: 0 10px;
             font-size: 16px
         }
-        
-        .btn input:hover {
-            font-size: 20px;
-            /* color: rgb(194, 37, 37) */
-            background-color: rgb(173, 29, 125);
-            color: #fff;
-        }
+
     </style>
 </head>
 
@@ -117,7 +95,23 @@
     </div>
     <div class="checkerboard"></div>
     <script>
+
+        
+
         var checkerboard = document.getElementsByClassName('checkerboard')[0];
+
+        var buttons = document.querySelectorAll('input');
+        buttons.forEach( node => {
+            node.onmousedown = function(){
+                this.style.color = 'red';
+            }
+             node.onmouseup = function () {
+                this.style.color = '';
+            }
+        })
+
+
+        checkerboard.style.height = checkerboard.offsetWidth + 'px';
         for (var i = 0; i < 225; i++) {
             var d = document.createElement('div');
             d.className = 'drop';
@@ -136,12 +130,7 @@
             }
             site[Math.floor(i / 15)].push(null);
             drop[i].onclick = fall;
-
-            // site[Math.floor(i / 20)][i % 20]=false;
-            // console.log(drop[i].getAttribute('row'), drop[i].getAttribute('col'));
         }
-        // console.dir(drop[0]);
-        // console.log(drop[0].offsetTop, drop[0].offsetLeft);
         function fall() { //落子
             var chess = document.createElement('div');
             chess.className = 'chess';
@@ -155,27 +144,14 @@
                 peoplehint.innerText = '黑方';
             }
             this.appendChild(chess);
-            //    lastfall[lastfall.length - 1] = this;
             lastfall.push(this);
-            //  console.log(lastfall);
-            // lastfall.push([]);
-            // lastfall[lastfall.length-1].Nodesite(this)
-            // var arr1 = this;
-            // lastfall[lastfall.length - 1] = arr1;
-            // lastfall= lastfall.toString();
-            //    console.log(lastfall)
-            // this.style.cursor=""
             site[parseInt(this.getAttribute('col'))][parseInt(this.getAttribute('row'))] = people; //将黑白存入地址栏中
-            // console.log(site[parseInt(this.getAttribute('col'))][parseInt(this.getAttribute('row'))]);
             this.onclick = null; //只允许点击一次
             tiexy(this.getAttribute('col'), this.getAttribute('row'));
 
         }
         var contrition = document.getElementsByClassName('contrition')[0];
         contrition.onclick = function() { //悔棋
-            // console.log(lastfall);
-            // console.dir(lastfall)
-            // console.log(typeof(lastfall));
             if (lastfall.length >= 1) {
                 lastfall[lastfall.length - 1].removeChild(lastfall[lastfall.length - 1].firstChild);
                 lastfall[lastfall.length - 1].onclick = fall;
@@ -196,21 +172,12 @@
             var x = parseInt(Arrtyx);
             var y = parseInt(Arrtyy);
 
-
-            // console.log(x,y);
-            // console.log(site);
             var bool = site[x][y];
             var conxy = [],
                 cony = [],
                 conx = [],
                 conyx = [];
             for (var i = -5; i < 6; i++) {
-                // if (x + i < 0 || y + i < 0 || x + i >= site.length  || y + i >= site.length )
-                //  { 
-                //     //排除超过边界的可能性
-                //     continue;
-                // }      
-                // *****************************************************************
                 if (x + i >= 0 && y + i >= 0 && x + i < site.length && y + i < site.length) { //判断正斜向的区域是否超过
                     if (site[x + i][y + i] === bool) { //  斜向判断
                         conxy.push([x+i,y+i]);
@@ -318,8 +285,6 @@
                         drop[j].style.backgroundColor = 'red';
                     }
                 }
-                //   site[w[i][0]][w[i][1]].style.backgroundImage = '';
-                // site[w[i][0]][w[i][1]].style.backgroundColor = 'red';
             }
         }
     </script>

@@ -83,8 +83,6 @@ function init() {
         endY = ev.changedTouches[0].pageY;
         var direction = GetSlideDirection(startX, startY, endX, endY);
         switch (direction) {
-            case 0:
-                break;
             case 1:
                 move(directionEnum.top);
                 break;
@@ -93,7 +91,6 @@ function init() {
                 break;
             case 3:
                 move(directionEnum.left);
-                // alert("!");
                 break;
             case 4:
                 move(directionEnum.right);
@@ -320,7 +317,7 @@ function GetSlideDirection(startX, startY, endX, endY) {
               }
               return result;
 }
-//滑动处理    
+// 初始化处理  
 window.onload = function () {
     document.querySelector(' .button').addEventListener('touchend', function () {
         location.reload(true)
