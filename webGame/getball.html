@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            line-height: 30px;
+        }
+        
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .checkerboard {
+            display: flex;
+            flex-wrap: wrap;
+            width: 90%;
+            max-width: 500px;
+            background-color: #ccc;
+            justify-content: center;
+            align-items: stretch;
+        }
+        
+        .checkerboard div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 10%;
+            box-sizing: border-box;
+            border: 1px solid #a3a3a3;
+            background-color: rgb(27, 24, 173);
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+        }
+        /* .chess{
+
+        } */
+        
+        .masking {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(158, 148, 148, .4);
+            /* opacity: .4; */
+            display: none;
+        }
+        
+        .masking div {
+            display: none;
+            width: 80%;
+            position: absolute;
+            max-width: 350px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 30%;
+            background-color: rgb(161, 32, 32);
+            opacity: 1;
+            text-align: center;
+            /* opacity: .4; */
+        }
+        
+        .masking div h2 {
+            font-size: 40px;
+            line-height: 140px;
+            color: #fff;
+        }
+        
+        .masking div span {
+            position: absolute;
+            bottom: 12%;
+            font-size: 24px;
+            color: rgb(191, 228, 29);
+            /* transform: translatex(-100%); */
+            width: 30%;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 6px;
+            line-height: 40px;
+            background-color: rgb(78, 20, 216);
+        }
+        
+        .masking div span:nth-child(2) {
+            left: 10%;
+        }
+        
+        .masking div span:last-child {
+            right: 10%;
+        }
+        
+        .masking div span:hover {
+            color: rgb(78, 20, 216);
+            background-color: rgb(191, 228, 29);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="masking">
+        <div class="maskingbox">
+            <h2>你输了</h2>
+            <span class="exit">退出</span>
+            <span class="again">重来</span>
+        </div>
+    </div>
+    <div class="checkerboard"></div>
+    <script>
+        var exit = document.getElementsByClassName('exit')[0],
+            again = document.getElementsByClassName('again')[0],
+            maskingbox = document.getElementsByClassName('maskingbox')[0],
+            checkerboard = document.getElementsByClassName('checkerboard')[0],
+            masking = document.getElementsByClassName('masking')[0],
+            wl = maskingbox.getElementsByTagName('h2')[0],
+            leiclass = document.getElementsByClassName('lei')[0];
+        site = [];
+        lei = [];
+        counter = 0;
+        exit.onclick = function() {
+            history.back()
+        }
+        again.onclick = function() {
+            location.reload(true);
+        }
+        for (var i = 0; i < 100; i++) {   // 创建100个棋子, 并且初始化
+            var chess = document.createElement('div');
+            chess.className = 'chess';
+            chess.innerHTML = '';
+            chess.setAttribute('row', Math.floor(i / 10));
+            chess.setAttribute('col', i % 10);
+            chess.winlose = 'win';
+            checkerboard.appendChild(chess);
+            chess.style.height  = checkerboard.offsetWidth / 10 + 'px'
+            if (site.length == Math.floor(i / 10)) {
+                site.push([]);
+            }
+            site[site.length - 1].push(chess);
+              
+            chess.bool = true;      // 初始化棋子的状态为无害
+            chess.onclick = down;   // 注册点击事件, (单击)
+            chess.onmousedown = mouseDown;  // 注册右键事件
+        }
+        //随机数函数
+        function getRandom(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+        for (var i = 0; i < 20; i++) {     // 初始化20个雷
+            var randomx = getRandom(0, 9);
+            var randomy = getRandom(0, 9);
+            site[randomx][randomy].winlose = 'lose';
+            lei.push(site[randomx][randomy]);
+            site[randomx][randomy].onclick = function() {
+                this.style.backgroundColor = 'red';
+                masking.style.display = 'block';
+                setTimeout(function() {
+                    maskingbox.style.display = 'block';
+                }, 1000)
+
+            }
+        }
+
+        function down(e) {    // 单击事件
+            this.onclick = null;
+            if (this.winlose == 'lose') return;
+            var mine = 0;
+            var x = parseInt(this.getAttribute('row'));
+            var y = parseInt(this.getAttribute('col'));
+            for (var i = x - 1; i < x + 2; i++) {
+                if (i < 0 || i > 9) continue;
+                for (var j = y - 1; j < y + 2; j++) {
+                    if (j < 0 || j > 9) continue;
+                    if (site[i][j].winlose == 'lose') mine++;
+                }
+            }
+
+            if (mine == 0) {
+                mine = '';
+                for (var a = x - 1; a < x + 2; a++) {
+                    if (a < 0 || a > 9) continue;
+                    for (var b = y - 1; b < y + 2; b++) {
+                        if (b < 0 || b > 9) continue;
+                        site[a][b].click();
+                    }
+                }
+            }
+            this.innerHTML = mine;
+            this.style.backgroundColor = '#fff';
+            this.style.color = '#000';
+            this.onmousedown = null;
+            counter++;
+            if (counter == 80) {
+                // alert('')
+                masking.style.display = 'block';
+                setTimeout(function() {
+                    wl.innerText = '你赢了';
+                    maskingbox.style.display = 'block';
+                }, 1000)
+            }
+            return;
+
+        }
+        document.oncontextmenu = function() {
+            return false;
+        }
+
+        function mouseDown(e) {   // 右键事件,  标注这里为一颗雷
+            // console.log(e,bool);
+            if (e.which == 3) {
+              
+                if (this.bool) {
+                    this.style.backgroundColor = '#a3a3a3';
+                    this.innerText = '?';
+                    this.bool = false;
+                    return;
+                }
+                this.style.backgroundColor = 'rgb(27, 24, 173)';
+                this.innerText = '';
+                this.bool = true;
+            }
+        }
+    </script>
+</body>
+
+</html>

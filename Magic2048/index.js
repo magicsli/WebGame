@@ -319,7 +319,7 @@ function GetSlideDirection(startX, startY, endX, endY) {
 }
 // 初始化处理  
 window.onload = function () {
-    document.querySelector(' .button').addEventListener('touchend', function () {
+    document.querySelector('.button').addEventListener('touchend', function () {
         location.reload(true)
     }) 
     init();

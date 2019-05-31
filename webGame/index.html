@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" /><!-- 删除苹果默认的工具栏和菜单栏 -->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" /><!-- 设置苹果工具栏颜色 -->
+        <meta name="format-detection" content="telphone=no, email=no" /><!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+        <!-- 启用360浏览器的极速模式(webkit) -->
+        <meta name="renderer" content="webkit">
+        <!-- 避免IE使用兼容模式 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+        <meta name="HandheldFriendly" content="true">
+        <!-- 微软的老式浏览器 -->
+        <meta name="MobileOptimized" content="320">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <!-- UC强制全屏 -->
+        <meta name="full-screen" content="yes">
+        <!-- QQ强制全屏 -->
+        <meta name="x5-fullscreen" content="true">
+        <!-- UC应用模式 -->
+        <meta name="browsermode" content="application">
+        <!-- QQ应用模式 -->
+        <meta name="x5-page-mode" content="app">
+        <!-- windows phone 点击无高光 -->
+        <meta name="msapplication-tap-highlight" content="no">
+        <!-- 适应移动端end -->
+    <title>Document</title>
+    <style>
+        body{
+            background-color: #060c21;
+            color:#fff;
+            display: flex;
+            justify-content:space-around;
+            align-items: center;
+            min-width: 100vw;
+            min-height: 100vh;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+
+        div{
+            position: relative;
+            width: 300px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #060c21;
+            margin: calc(4vw);
+            box-sizing: border-box;
+            padding: 20px;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all .6s;
+        }
+        div:hover{
+            width: 330px;
+            height: 440px;
+            padding: 30px;
+        }
+
+         div::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            bottom: -2px;
+            left: -2px;
+            right: -2px;
+            background-color: #fff;
+            z-index: -1;
+        }
+
+          div::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            bottom: -2px;
+            left: -2px;
+            right: -2px;
+            background-color: #fff;
+            z-index: -2;
+            filter: blur(40px)
+        }
+        div::after,
+        div::before {
+            background-image: linear-gradient(235deg, #89ff00, #060c21, #00bcd4);
+
+        }
+
+        div:nth-child(2)::after,
+        div:nth-child(2)::before {
+            background-image: linear-gradient(235deg, rgb(192, 106, 25), #060c21, #1734b6);
+
+        }
+
+        div:nth-child(3)::after,
+        div:nth-child(3)::before {
+            background-image: linear-gradient(235deg, rgb(29, 175, 119), #060c21, #abb617);
+
+        }
+
+        div h3 {
+            margin: 0 0 15% 0;
+        }
+        div p {
+            font-size: 14px;
+        }
+
+        @media screen and  (max-width:750px) {
+            body {
+                flex-wrap: wrap
+            }
+            div{
+                width: calc(80vw);
+                height: calc(26vh);
+            }
+             div:hover{
+                width:calc(80vw);
+                height: calc(26vh);
+                padding: 20px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="magic2048">
+        <h3  style="color: #89ff00">magic-2048</h3>
+        <p>兼容移动端; 点击 上, 下, 左, 右, (在移动模式下使用触屏滑动) 进行控制 </p>
+    </div>
+    <div class="chess">
+        <h3 style="color: rgb(192, 106, 25)">五子棋</h3>
+        <p>点击棋盘落下棋子, 当有任意方向有五颗棋子练成一排时, 即游戏结束; </p>
+    </div>
+    <div class="getball">
+        <h3 style="color: rgb(190, 60, 99)">扫雷</h3>
+        <p>游戏开始会随机刷新20颗雷, 当成功点击完所有的空地后或者触发地雷,即游戏结束</p>
+    </div>
+    <script>
+        var magic2048 = document.querySelector('.magic2048');
+        var chess = document.querySelector('.chess');
+        var getball = document.querySelector('.getball');
+
+        magic2048.onclick = function(){
+            location.href = './Magic2048/index.html'
+        }
+
+        chess.onclick = function () {
+            location.href = './chess/index.html'
+        }
+
+        getball.onclick = function () {
+            location.href = './getball.html'
+        }
+    </script>
+</body>
+</html>

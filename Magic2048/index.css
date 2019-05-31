@@ -2,6 +2,10 @@
      margin: 0;
      padding: 0;
  }
+ html{
+    touch-action:none;
+    touch-action:pan-y;
+}
  #my2048 {
      margin: 20px auto;
      position: relative;
